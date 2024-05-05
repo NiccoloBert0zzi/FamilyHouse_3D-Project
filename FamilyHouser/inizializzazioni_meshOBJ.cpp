@@ -262,7 +262,7 @@ void INIT_VAO(void)
 
 	Model3D.clear();
 
-	name = "CharizardMegaY.obj";
+	name = "house.obj";
 	path = Meshdir + name;
 	obj = loadAssImp(path.c_str(), Model3D);
 
