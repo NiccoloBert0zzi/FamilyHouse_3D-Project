@@ -88,23 +88,6 @@ void INIT_VAO(void)
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
 
-	//Crea piano di appoggio
-	crea_piano_suddiviso(&oggetto, vec4(0.01, 0.5451, 0.1333, 1.0));
-	crea_VAO_Vector(&oggetto);
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(0.0, -1.5, 0.0));
-	oggetto.Model = scale(oggetto.Model, vec3(100000.0, 1.0, 100000.0));
-	oggetto.nome = "Terreno ";
-
-	oggetto.sceltaVS = ShaderOption::NONE;  // NO SHADING
-	oggetto.material = MaterialType::EMERALD;
-	//Scena.push_back(oggetto);
-
-	oggetto.vertici.clear();
-	oggetto.colori.clear();
-	oggetto.indici.clear();
-	oggetto.normali.clear();
-	oggetto.texCoords.clear();
 	//Crea Bandiera
 	crea_cilindro(&oggetto, vec4(0.0, 0.0, 1.0, 1.0));
 	crea_VAO_Vector(&oggetto);
@@ -219,26 +202,21 @@ void INIT_VAO(void)
 	oggetto.texCoords.clear();
 
 	 
-	//Cono
-	crea_cono(&oggetto, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_parallelepipedo_personalizzato(&oggetto, vec4(1.0, 0.0, 1.0, 1.0), 2.0f, 0.1f, 1.5f); // Larghezza, altezza, profondità
 	crea_VAO_Vector(&oggetto);
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(-1.0, 1.6, 1));
-	oggetto.Model = scale(oggetto.Model, vec3(1.2, 1.4, 1.2));
-	oggetto.Model = rotate(oggetto.Model, radians(-180.0f), vec3(1.0, 0.0, 0.0));
- 
-	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
-	oggetto.nome = "Cono";
-	oggetto.material = MaterialType::BRASS;
-
-	 Scena.push_back(oggetto);
+	oggetto.Model = translate(mat4(1.0f), vec3(-3.0f, 3.0f, 3.0f)); // Posizione del piano
+	oggetto.Model = scale(oggetto.Model, vec3(2.0, 2.0, 2.0));
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;  //Interpolative Shading
+	oggetto.material = MaterialType::RED_PLASTIC; // Materiale del piano
+	oggetto.nome = "Tavolo";
+	Scena.push_back(oggetto);
 
 	oggetto.vertici.clear();
 	oggetto.colori.clear();
 	oggetto.indici.clear();
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
-	 
+	
 	////TORO
 	//crea_toro(&oggetto, vec4(0.0, 1.0, 0.0, 1.0));
 	//crea_VAO_Vector(&oggetto);
@@ -269,24 +247,6 @@ void INIT_VAO(void)
 	//oggetto.indici.clear();
 	//oggetto.normali.clear();
 	//oggetto.texCoords.clear();
-
-	//PANNELLO
-	crea_piano(&oggetto, vec4(0.2, 0.2, 0.9, 1.0));
-	crea_VAO_Vector(&oggetto);
-	oggetto.nome = "Pannello";
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(-2.0, 4.0, 7.0));
-	oggetto.Model = scale(oggetto.Model, vec3(2.0f, 2.0f, 2.0f));
-	oggetto.Model = rotate(oggetto.Model, radians(90.0f), vec3(1.0, 0.0, 0.0));
-	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
-	oggetto.material = MaterialType::EMERALD;
-	Scena.push_back(oggetto);
-	oggetto.vertici.clear();
-
-	oggetto.colori.clear();
-	oggetto.indici.clear();
-	oggetto.normali.clear();
-	oggetto.texCoords.clear();
 
 	
 	bool obj;

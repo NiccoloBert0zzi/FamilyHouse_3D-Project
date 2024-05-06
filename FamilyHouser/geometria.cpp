@@ -48,6 +48,63 @@ void crea_cubo(Mesh* mesh)
 
 
 }
+void crea_parallelepipedo_personalizzato(Mesh* mesh, vec4 color, float larghezza, float altezza, float profondita) {
+	// Calcolo della metà delle dimensioni per semplificare la costruzione
+	float half_width = larghezza / 2.0f;
+	float half_height = altezza / 2.0f;
+	float half_depth = profondita / 2.0f;
+
+	// Calcolo dei vertici
+	vec3 front_bottom_left(-half_width, -half_height, half_depth);
+	vec3 front_bottom_right(half_width, -half_height, half_depth);
+	vec3 front_top_right(half_width, half_height, half_depth);
+	vec3 front_top_left(-half_width, half_height, half_depth);
+
+	vec3 back_bottom_left(-half_width, -half_height, -half_depth);
+	vec3 back_bottom_right(half_width, -half_height, -half_depth);
+	vec3 back_top_right(half_width, half_height, -half_depth);
+	vec3 back_top_left(-half_width, half_height, -half_depth);
+
+	// Aggiunta dei vertici
+	mesh->vertici.push_back(front_bottom_left);
+	mesh->vertici.push_back(front_bottom_right);
+	mesh->vertici.push_back(front_top_right);
+	mesh->vertici.push_back(front_top_left);
+
+	mesh->vertici.push_back(back_bottom_left);
+	mesh->vertici.push_back(back_bottom_right);
+	mesh->vertici.push_back(back_top_right);
+	mesh->vertici.push_back(back_top_left);
+
+	// Colori
+	for (int i = 0; i < 8; ++i) {
+		mesh->colori.push_back(color); // Colore bianco con opacità 0.5
+	}
+
+	// Ancora
+	mesh->vertici.push_back(vec3(0.0f, 0.0f, 0.0f)); // Ancora al centro
+	mesh->colori.push_back(vec4(0.0, 1.0, 0.0, 1.0)); // Colore verde per l'ancora
+	mesh->ancora_obj = vec4(0.0, 0.0, 0.0, 1.0); // Posizione dell'ancora
+
+	// Indici
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
+	mesh->indici.push_back(2); mesh->indici.push_back(3); mesh->indici.push_back(0);
+	mesh->indici.push_back(1); mesh->indici.push_back(5); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(2); mesh->indici.push_back(1);
+	mesh->indici.push_back(7); mesh->indici.push_back(6); mesh->indici.push_back(5);
+	mesh->indici.push_back(5); mesh->indici.push_back(4); mesh->indici.push_back(7);
+	mesh->indici.push_back(4); mesh->indici.push_back(0); mesh->indici.push_back(3);
+	mesh->indici.push_back(3); mesh->indici.push_back(7); mesh->indici.push_back(4);
+	mesh->indici.push_back(4); mesh->indici.push_back(5); mesh->indici.push_back(1);
+	mesh->indici.push_back(1); mesh->indici.push_back(0); mesh->indici.push_back(4);
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(6);
+	mesh->indici.push_back(6); mesh->indici.push_back(7); mesh->indici.push_back(3);
+
+	int nv = mesh->vertici.size();
+	mesh->indici.push_back(nv - 1); // Aggiunta dell'indice per l'ancora
+}
+
+
 void crea_piramide(Mesh* mesh)
 {
 	mesh->vertici.push_back(vec3(-1.0, 0.0, 1.0));

@@ -91,7 +91,10 @@ void keyboardPressedEvent(unsigned char key, int x, int y)
 		WorkingAxis = Z;
 		stringa_asse = " Asse Z";  //Seleziona l'asse Z come asse lungo cui effettuare l'operazione selezionata (tra traslazione, rotazione, scalatura)
 		break;
-
+		//Space
+	case 32:
+		moveCameraUp();
+		break;
 	default:
 		break;
 	}
