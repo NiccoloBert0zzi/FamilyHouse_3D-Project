@@ -26,7 +26,7 @@ typedef struct {
 	GLuint EBO_indici;
 	GLuint VBO_coord_texture;
 	string nome;
-	ShadingType shading;
+	int illuminazione;
 	MaterialType material;
 	vec4 ancora_obj;
 	vec4 ancora_world;
@@ -40,14 +40,13 @@ typedef struct {
 	vector<vec2> texCoords;
 	mat4 ModelM;
 	int sceltaVS;
-	int sceltaFS;
 	GLuint VAO;
 	GLuint VBO_G;
 	GLuint VBO_C;
 	GLuint VBO_normali;
 	GLuint EBO_indici;
 	GLuint VBO_coord_texture;
-	ShadingType shading;
+	int illuminazione;
 	Material materiale;
 	string nome;
 	vec4 ancora_obj;

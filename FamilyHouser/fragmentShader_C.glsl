@@ -6,6 +6,7 @@ in vec3 N, L,R,V;
   uniform float time;
  uniform vec2 resolution;
 uniform int sceltaVS;
+uniform int sceltaFS;
 
 struct PointLight{
 	vec3 position;
@@ -48,11 +49,20 @@ void main()
             vec3 diffuse = light.power * light.color * coseno_angolo_theta * material.diffuse;
 
             //speculare
-            float coseno_angolo_alfa =  pow(max(dot(V,R),0),material.shininess);
-
-            vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
+            float coseno_angolo_alfa;
+            vec3 specular;
+			if(sceltaFS == 1){
+				vec3 R = reflect(-L,N);
+				coseno_angolo_alfa = pow(max(dot(R,V),0.0), material.shininess);
+				specular = light.power * light.color * coseno_angolo_alfa * material.specular;
+			} else if (sceltaFS == 2) {
+				vec3 H = normalize(L+V);
+				coseno_angolo_alfa = pow(max(dot(N,H),0), material.shininess);
+				specular = light.power * light.color * coseno_angolo_alfa * material.specular;
+			}
 
             FragColor = vec4(ambient + diffuse + specular, 1.0);      
+			
     }   
 
     

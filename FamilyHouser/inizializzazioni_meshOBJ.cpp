@@ -16,7 +16,7 @@ extern int height, width;
 extern ViewSetup SetupTelecamera;
 extern PerspectiveSetup SetupProspettiva;
 extern vector<Material> materials;
-extern vector<Shader> shaders;
+extern vector<Shader> shaders, illuminazioni;
 extern point_light light;
 extern int texture, texture1,texture2;
 
@@ -78,7 +78,7 @@ void INIT_VAO(void)
 	oggetto.Model = scale(oggetto.Model, vec3(0.5, 0.5, 0.5));
 	oggetto.nome = "Sfera riflettente";
 
-	oggetto.sceltaVS = 1;  //Interpolative Shading
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;  //Interpolative Shading
 	oggetto.material = MaterialType::RED_PLASTIC;
 	Scena.push_back(oggetto);
 
@@ -96,7 +96,7 @@ void INIT_VAO(void)
 	oggetto.Model = scale(oggetto.Model, vec3(100000.0, 1.0, 100000.0));
 	oggetto.nome = "Terreno ";
 
-	oggetto.sceltaVS = 0;  // NO SHADING
+	oggetto.sceltaVS = ShaderOption::NONE;  // NO SHADING
 	oggetto.material = MaterialType::EMERALD;
 	//Scena.push_back(oggetto);
 
@@ -112,7 +112,7 @@ void INIT_VAO(void)
 	oggetto.Model = translate(oggetto.Model, vec3(-8.0, -1.5, 0.0));
 	oggetto.Model = scale(oggetto.Model, vec3(0.2, 6.0, 0.2));
 	oggetto.nome = "Bandiera";
-	oggetto.sceltaVS = 1;
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
 	oggetto.material = MaterialType::SLATE;
 
 
@@ -131,7 +131,7 @@ void INIT_VAO(void)
 	oggetto.Model = scale(oggetto.Model, vec3(5.0, 1.8, 1.0));
 	oggetto.Model = rotate(oggetto.Model, radians(90.0f), vec3(1.0, 0.0, 0.0));
 	 
-	oggetto.sceltaVS = 4;  //Shading per bandiera sventolante
+	oggetto.sceltaVS = ShaderOption::WAVE;  //Shading per bandiera sventolante
 	oggetto.material = MaterialType::BRASS;
 	oggetto.nome = "Telo";
 	Scena.push_back(oggetto);
@@ -150,7 +150,8 @@ void INIT_VAO(void)
 	oggetto.Model = scale(oggetto.Model, vec3(2.0, 2.0, 2.0));
 	oggetto.nome = "Sfera";
  
-	oggetto.sceltaVS = 1;  //Interpolative Shading
+	oggetto.sceltaVS = ShaderOption::PHONG_SHADING;  //Interpolative Shading
+	oggetto.illuminazione = ShadingType::PHONG;
 	oggetto.material = MaterialType::RED_PLASTIC;
 	Scena.push_back(oggetto);
 	
@@ -159,6 +160,64 @@ void INIT_VAO(void)
 	oggetto.indici.clear();
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
+
+	//Sfera
+	crea_sfera(&oggetto, vec4(1.0, 0.0, 1.0, 1.0));
+	crea_VAO_Vector(&oggetto);
+	oggetto.Model = mat4(1.0);
+	oggetto.Model = translate(oggetto.Model, vec3(10.0, 0.0, 0.0)); // Spostamento a destra con un po' di spazio
+	oggetto.Model = scale(oggetto.Model, vec3(2.0, 2.0, 2.0));
+	oggetto.nome = "Sfera";
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;  //Interpolative Shading
+	oggetto.illuminazione = ShadingType::PHONG;
+	oggetto.material = MaterialType::RED_PLASTIC;
+	Scena.push_back(oggetto);
+
+	// Pulizia delle strutture dati dell'oggetto per la prossima creazione
+	oggetto.vertici.clear();
+	oggetto.colori.clear();
+	oggetto.indici.clear();
+	oggetto.normali.clear();
+	oggetto.texCoords.clear();
+
+	//Sfera
+	crea_sfera(&oggetto, vec4(1.0, 0.0, 1.0, 1.0));
+	crea_VAO_Vector(&oggetto);
+	oggetto.Model = mat4(1.0);
+	oggetto.Model = translate(oggetto.Model, vec3(4.0, -6.0, 0.0)); // Spostamento sotto rispetto alla prima sfera
+	oggetto.Model = scale(oggetto.Model, vec3(2.0, 2.0, 2.0));
+	oggetto.nome = "Sfera";
+	oggetto.sceltaVS = ShaderOption::PHONG_SHADING;  //Interpolative Shading
+	oggetto.illuminazione = ShadingType::BLINN;
+	oggetto.material = MaterialType::RED_PLASTIC;
+	Scena.push_back(oggetto);
+
+	// Pulizia delle strutture dati dell'oggetto per la prossima creazione
+	oggetto.vertici.clear();
+	oggetto.colori.clear();
+	oggetto.indici.clear();
+	oggetto.normali.clear();
+	oggetto.texCoords.clear();
+
+	//Sfera
+	crea_sfera(&oggetto, vec4(1.0, 0.0, 1.0, 1.0));
+	crea_VAO_Vector(&oggetto);
+	oggetto.Model = mat4(1.0);
+	oggetto.Model = translate(oggetto.Model, vec3(10.0, -6.0, 0.0)); // Spostamento sotto rispetto alla prima sfera
+	oggetto.Model = scale(oggetto.Model, vec3(2.0, 2.0, 2.0));
+	oggetto.nome = "Sfera";
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;  //Interpolative Shading
+	oggetto.illuminazione = ShadingType::BLINN;
+	oggetto.material = MaterialType::RED_PLASTIC;
+	Scena.push_back(oggetto);
+
+	// Pulizia delle strutture dati dell'oggetto per la prossima creazione
+	oggetto.vertici.clear();
+	oggetto.colori.clear();
+	oggetto.indici.clear();
+	oggetto.normali.clear();
+	oggetto.texCoords.clear();
+
 	 
 	//Cono
 	crea_cono(&oggetto, vec4(1.0, 0.0, 0.0, 1.0));
@@ -168,7 +227,7 @@ void INIT_VAO(void)
 	oggetto.Model = scale(oggetto.Model, vec3(1.2, 1.4, 1.2));
 	oggetto.Model = rotate(oggetto.Model, radians(-180.0f), vec3(1.0, 0.0, 0.0));
  
-	oggetto.sceltaVS = 1;
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
 	oggetto.nome = "Cono";
 	oggetto.material = MaterialType::BRASS;
 
@@ -180,36 +239,37 @@ void INIT_VAO(void)
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
 	 
-	//TORO
-	crea_toro(&oggetto, vec4(0.0, 1.0, 0.0, 1.0));
-	crea_VAO_Vector(&oggetto);
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(7.0, 2.0, 7.0));
-	oggetto.Model = scale(oggetto.Model, vec3(1.0, 0.5, 1.0));
-	oggetto.nome = "Toro";
-	oggetto.material = MaterialType::YELLOW;
-	oggetto.sceltaVS = 1;
-	Scena.push_back(oggetto);
-	oggetto.vertici.clear();
-	oggetto.colori.clear();
-	oggetto.indici.clear();
-	oggetto.normali.clear();
-	oggetto.texCoords.clear();
-	//Cilindro
-	crea_cilindro(&oggetto, vec4(0.0, 0.0, 1.0, 1.0));
-	crea_VAO_Vector(&oggetto);
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(7.0, -1.0, 7.0));
-	oggetto.Model = scale(oggetto.Model, vec3(1.0, 4.0, 1.0));
-	oggetto.nome = "Bandiera";
-	oggetto.sceltaVS = 1;
-	oggetto.material = MaterialType::EMERALD;
-	Scena.push_back(oggetto);
-	oggetto.vertici.clear();
-	oggetto.colori.clear();
-	oggetto.indici.clear();
-	oggetto.normali.clear();
-	oggetto.texCoords.clear();
+	////TORO
+	//crea_toro(&oggetto, vec4(0.0, 1.0, 0.0, 1.0));
+	//crea_VAO_Vector(&oggetto);
+	//oggetto.Model = mat4(1.0);
+	//oggetto.Model = translate(oggetto.Model, vec3(7.0, 2.0, 7.0));
+	//oggetto.Model = scale(oggetto.Model, vec3(1.0, 0.5, 1.0));
+	//oggetto.nome = "Toro";
+	//oggetto.material = MaterialType::YELLOW;
+	//oggetto.sceltaVS = 1;
+	//Scena.push_back(oggetto);
+	//oggetto.vertici.clear();
+	//oggetto.colori.clear();
+	//oggetto.indici.clear();
+	//oggetto.normali.clear();
+	//oggetto.texCoords.clear();
+	////Cilindro
+	//crea_cilindro(&oggetto, vec4(0.0, 0.0, 1.0, 1.0));
+	//crea_VAO_Vector(&oggetto);
+	//oggetto.Model = mat4(1.0);
+	//oggetto.Model = translate(oggetto.Model, vec3(7.0, -1.0, 7.0));
+	//oggetto.Model = scale(oggetto.Model, vec3(1.0, 4.0, 1.0));
+	//oggetto.nome = "Bandiera";
+	//oggetto.sceltaVS = 1;
+	//oggetto.material = MaterialType::EMERALD;
+	//Scena.push_back(oggetto);
+	//oggetto.vertici.clear();
+	//oggetto.colori.clear();
+	//oggetto.indici.clear();
+	//oggetto.normali.clear();
+	//oggetto.texCoords.clear();
+
 	//PANNELLO
 	crea_piano(&oggetto, vec4(0.2, 0.2, 0.9, 1.0));
 	crea_VAO_Vector(&oggetto);
@@ -218,7 +278,7 @@ void INIT_VAO(void)
 	oggetto.Model = translate(oggetto.Model, vec3(-2.0, 4.0, 7.0));
 	oggetto.Model = scale(oggetto.Model, vec3(2.0f, 2.0f, 2.0f));
 	oggetto.Model = rotate(oggetto.Model, radians(90.0f), vec3(1.0, 0.0, 0.0));
-	oggetto.sceltaVS = 1;
+	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
 	oggetto.material = MaterialType::EMERALD;
 	Scena.push_back(oggetto);
 	oggetto.vertici.clear();
@@ -245,7 +305,7 @@ void INIT_VAO(void)
 		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, 6.0, 12.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5,0.5));
 		Model3D[i].nome = "Moneta";
-		Model3D[i].sceltaVS = 3;
+		Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
 
 	 
 		vec3 ambiental = Model3D[i].materiale.ambient;
@@ -277,7 +337,7 @@ void INIT_VAO(void)
 		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, -1.0, 16.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5, 0.5));
 		Model3D[i].nome = "POkemon";
-		Model3D[i].sceltaVS = 3;
+		Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
 
 
 		vec3 ambiental = Model3D[i].materiale.ambient;
@@ -381,13 +441,21 @@ void INIT_Illuminazione()
 	shaders.resize(5);
 	shaders[ShaderOption::NONE].value = 0;
 	shaders[ShaderOption::NONE].name = "NONE";
-	shaders[ShaderOption::GOURAD_SHADING].value = 1;
-	shaders[ShaderOption::GOURAD_SHADING].name = "GOURAD SHADING";
+	shaders[ShaderOption::INTERPOLATING_SHADING].value = 1;
+	shaders[ShaderOption::INTERPOLATING_SHADING].name = "INTERPOLATING SHADING";
 	shaders[ShaderOption::PHONG_SHADING].value = 2;
 	shaders[ShaderOption::PHONG_SHADING].name = "PHONG SHADING";
-	shaders[ShaderOption::PHONG_SHADING].value = 3;
+	shaders[ShaderOption::NO_TEXTURE].value = 3;
 	shaders[ShaderOption::NO_TEXTURE].name = "NO TEXTURE";
 	shaders[ShaderOption::WAVE].value = 4;
 	shaders[ShaderOption::WAVE].name = "WAVE";
 
+	//setup illuminazioni
+	illuminazioni.resize(3);
+	illuminazioni[ShadingType::NO_NONE].value = 0;
+	illuminazioni[ShadingType::NO_NONE].name = "NO_NONE";
+	illuminazioni[ShadingType::PHONG].value = 1;
+	illuminazioni[ShadingType::PHONG].name = "PHONG";
+	illuminazioni[ShadingType::BLINN].value = 2;
+	illuminazioni[ShadingType::BLINN].name = "BLINN";
 }

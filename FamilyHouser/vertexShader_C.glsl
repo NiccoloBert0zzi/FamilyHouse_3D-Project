@@ -9,6 +9,7 @@ layout (location = 2 ) in vec3 vertexNormal; // Attributo Normale 2
  uniform mat4 Projection;
  uniform mat4 View;
 uniform int sceltaVS;
+uniform int sceltaFS;
 uniform float time;
 uniform vec3 viewPos;
 
@@ -75,12 +76,18 @@ void main()
             vec3 diffuse = light.power * light.color * coseno_angolo_theta * material.diffuse;
 
             //speculare
-            float coseno_angolo_alfa =  pow(max(dot(V,R),0),material.shininess);
+            float coseno_angolo_alfa;
+            vec3 specular;
+			if(sceltaFS == 1){
+				coseno_angolo_alfa = pow(max(dot(V,R),0), material.shininess);
+				specular = light.power * coseno_angolo_alfa * material.specular;
+			} else if (sceltaFS == 2) {
+				vec3 H = normalize(L+V);
+				coseno_angolo_alfa = pow(max(dot(N,H),0), material.shininess);
+				specular = light.power * coseno_angolo_alfa * material.specular;
+			}
 
-            vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
-
-            ourColor = vec4(ambient + diffuse + specular, 1.0);   
-            
+            ourColor = vec4(ambient + diffuse + specular, 1.0);    
             frag_coord_st=coord_st;
             
     }

@@ -27,7 +27,7 @@ int height = 800;
 string stringa_asse;
 string Operazione;
 vector<Material> materials;
-vector<Shader> shaders;
+vector<Shader> shaders, illuminazioni;
 LightShaderUniform light_unif = {};
 vector<MeshObj> Model3D;
 vector<vector<MeshObj>> ScenaObj;
@@ -150,6 +150,12 @@ void shader_menu_function(int option) {
 
 	glutPostRedisplay();
 }
+void illumination_menu_function(int option) {
+	if (selected_obj > -1)
+		Scena[selected_obj].illuminazione = illuminazioni[option].value;
+
+	glutPostRedisplay();
+}
 
 void buildOpenGLMenu()
 {
@@ -161,11 +167,16 @@ void buildOpenGLMenu()
 	glutAddMenuEntry(materials[MaterialType::YELLOW].name.c_str(), MaterialType::YELLOW);
 
 	int shaderSubMenu = glutCreateMenu(shader_menu_function);
-	glutAddMenuEntry(shaders[ShaderOption::NONE].name.c_str(), ShaderOption::NONE);
-	glutAddMenuEntry(shaders[ShaderOption::GOURAD_SHADING].name.c_str(), ShaderOption::GOURAD_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::PHONG_SHADING].name.c_str(), ShaderOption::PHONG_SHADING);
-	glutAddMenuEntry(shaders[ShaderOption::NO_TEXTURE].name.c_str(), ShaderOption::NO_TEXTURE);
-	glutAddMenuEntry(shaders[ShaderOption::WAVE].name.c_str(), ShaderOption::WAVE);
+	glutAddMenuEntry(shaders[ShaderOption::NONE].name.c_str(), ShaderOption::NONE); //no shading vs 0
+	glutAddMenuEntry(shaders[ShaderOption::INTERPOLATING_SHADING].name.c_str(), ShaderOption::INTERPOLATING_SHADING); // inter con textre vs 1
+	glutAddMenuEntry(shaders[ShaderOption::PHONG_SHADING].name.c_str(), ShaderOption::PHONG_SHADING); //phong  vs == 2
+	glutAddMenuEntry(shaders[ShaderOption::NO_TEXTURE].name.c_str(), ShaderOption::NO_TEXTURE); // inter senza textre  vs 3
+	glutAddMenuEntry(shaders[ShaderOption::WAVE].name.c_str(), ShaderOption::WAVE); //vs 4
+
+	int illuminationSubMenu = glutCreateMenu(illumination_menu_function);
+	glutAddMenuEntry(shaders[ShadingType::NO_NONE].name.c_str(), ShadingType::NO_NONE); //no illuminazione vs 0
+	glutAddMenuEntry(shaders[ShadingType::PHONG].name.c_str(), ShadingType::PHONG); //illu. phong vs 0
+	glutAddMenuEntry(shaders[ShadingType::BLINN].name.c_str(), ShadingType::BLINN); //ill blinn
 
 
 	glutCreateMenu(main_menu_func); // richiama main_menu_func() alla selezione di una voce menu
@@ -175,6 +186,7 @@ void buildOpenGLMenu()
 	glutAddMenuEntry("Face fill", MenuOption::FACE_FILL);
 	glutAddSubMenu("Material", materialSubMenu);
 	glutAddSubMenu("Shader", shaderSubMenu);
+	glutAddSubMenu("Illumination", illuminationSubMenu);
 	glutAttachMenu(GLUT_MIDDLE_BUTTON);
 }
 
@@ -248,7 +260,7 @@ void drawScene(void)
 		//Passo al Vertex Shader il puntatore alla matrice Model dell'oggetto k-esimo della Scena, che sarà associata alla variabile Uniform mat4 Projection
 		//all'interno del Vertex shader. Uso l'identificatio MatModel
 		glUniform1i(locSceltaVs, Scena[k].sceltaVS);
-	 
+		glUniform1i(locSceltaFs, Scena[k].illuminazione);
 		glUniform3fv(light_unif.material_ambient, 1, glm::value_ptr(materials[Scena[k].material].ambient));
 		glUniform3fv(light_unif.material_diffuse, 1, glm::value_ptr(materials[Scena[k].material].diffuse));
 		glUniform3fv(light_unif.material_specular, 1, glm::value_ptr(materials[Scena[k].material].specular));
@@ -343,10 +355,21 @@ void drawScene(void)
 	RenderText(programId_text, Projection_text, stringa_asse, VAO_Text, VBO_Text, 50.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
 
 
-	RenderText(programId_text, Projection_text, "Oggetto selezionato", VAO_Text, VBO_Text, 80.0f, 750.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+	if (selected_obj > -1) {
+		float y_offset = 700.0f; // Inizializza l'offset verticale
 
-	if (selected_obj > -1)
-		RenderText(programId_text, Projection_text, name_selected_obj.c_str(), VAO_Text, VBO_Text, 120.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		// Render del nome dell'oggetto selezionato
+		RenderText(programId_text, Projection_text, ("Oggetto selezionato: " + name_selected_obj), VAO_Text, VBO_Text, 80.0f, y_offset, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		y_offset -= 30.0f; // Spostamento verso il basso per il prossimo testo
+
+		// Render dello shader selezionato
+		RenderText(programId_text, Projection_text, ("Shader selezionato: " + shaders[Scena[selected_obj].sceltaVS].name), VAO_Text, VBO_Text, 80.0f, y_offset, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		y_offset -= 30.0f; // Spostamento verso il basso per il prossimo testo
+
+		// Render dell'illuminazione selezionata
+		RenderText(programId_text, Projection_text, ("Illuminazione selezionata: " + illuminazioni[Scena[selected_obj].illuminazione].name), VAO_Text, VBO_Text, 80.0f, y_offset, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+	}
+
 
 
 	glutSwapBuffers();
@@ -356,7 +379,6 @@ void drawScene(void)
 
 void update(int value)
 { 
-	angolo = angolo + 1;
 	glutTimerFunc(200, update, 0);
 	glutPostRedisplay();
 
