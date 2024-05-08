@@ -241,7 +241,7 @@ void drawScene(void)
 	glPointSize(10.0);
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 	//Definizione colore luce, posizione ed intensit 
-	glUniform3f(light_unif.light_position_pointer, light.position.x + 80 * cos(radians(angolo)), light.position.y, light.position.z + 80 * sin(radians(angolo)));
+	glUniform3f(light_unif.light_position_pointer, SetupTelecamera.position.x, SetupTelecamera.position.y, SetupTelecamera.position.z);
 	glUniform3f(light_unif.light_color_pointer, light.color.r, light.color.g, light.color.b);
 	glUniform1f(light_unif.light_power_pointer, light.power);
 
@@ -347,9 +347,6 @@ void drawScene(void)
 
 	}
 	//Imposto il renderizzatore del testo
-
-
-
 	RenderText(programId_text, Projection_text, Operazione, VAO_Text, VBO_Text, 50.0f, 650.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
 
 	RenderText(programId_text, Projection_text, stringa_asse, VAO_Text, VBO_Text, 50.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
@@ -381,7 +378,6 @@ void update(int value)
 { 
 	glutTimerFunc(200, update, 0);
 	glutPostRedisplay();
-
 }
 
 int main(int argc, char* argv[])

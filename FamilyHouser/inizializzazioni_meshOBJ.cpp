@@ -218,139 +218,152 @@ void INIT_VAO(void)
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
 
-	 
-	//Cono
-	crea_cono(&oggetto, vec4(1.0, 0.0, 0.0, 1.0));
+
+	// Creazione del parallelepipedo per il piano del tavolo
+	crea_Cubo(&oggetto, vec4(1.0, 0.0, 0.0, 1.0));
 	crea_VAO_Vector(&oggetto);
 	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(-1.0, 1.6, 1));
-	oggetto.Model = scale(oggetto.Model, vec3(1.2, 1.4, 1.2));
+	oggetto.Model = translate(oggetto.Model, vec3(-1.0, -3.6, 6));
+	oggetto.Model = scale(oggetto.Model, vec3(4.2, 0.5, 3.2));
 	oggetto.Model = rotate(oggetto.Model, radians(-180.0f), vec3(1.0, 0.0, 0.0));
- 
-	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
-	oggetto.nome = "Cono";
-	oggetto.material = MaterialType::BRASS;
 
-	 Scena.push_back(oggetto);
-
-	oggetto.vertici.clear();
-	oggetto.colori.clear();
-	oggetto.indici.clear();
-	oggetto.normali.clear();
-	oggetto.texCoords.clear();
-	 
-	////TORO
-	//crea_toro(&oggetto, vec4(0.0, 1.0, 0.0, 1.0));
-	//crea_VAO_Vector(&oggetto);
-	//oggetto.Model = mat4(1.0);
-	//oggetto.Model = translate(oggetto.Model, vec3(7.0, 2.0, 7.0));
-	//oggetto.Model = scale(oggetto.Model, vec3(1.0, 0.5, 1.0));
-	//oggetto.nome = "Toro";
-	//oggetto.material = MaterialType::YELLOW;
-	//oggetto.sceltaVS = 1;
-	//Scena.push_back(oggetto);
-	//oggetto.vertici.clear();
-	//oggetto.colori.clear();
-	//oggetto.indici.clear();
-	//oggetto.normali.clear();
-	//oggetto.texCoords.clear();
-	////Cilindro
-	//crea_cilindro(&oggetto, vec4(0.0, 0.0, 1.0, 1.0));
-	//crea_VAO_Vector(&oggetto);
-	//oggetto.Model = mat4(1.0);
-	//oggetto.Model = translate(oggetto.Model, vec3(7.0, -1.0, 7.0));
-	//oggetto.Model = scale(oggetto.Model, vec3(1.0, 4.0, 1.0));
-	//oggetto.nome = "Bandiera";
-	//oggetto.sceltaVS = 1;
-	//oggetto.material = MaterialType::EMERALD;
-	//Scena.push_back(oggetto);
-	//oggetto.vertici.clear();
-	//oggetto.colori.clear();
-	//oggetto.indici.clear();
-	//oggetto.normali.clear();
-	//oggetto.texCoords.clear();
-
-	//PANNELLO
-	crea_piano(&oggetto, vec4(0.2, 0.2, 0.9, 1.0));
-	crea_VAO_Vector(&oggetto);
-	oggetto.nome = "Pannello";
-	oggetto.Model = mat4(1.0);
-	oggetto.Model = translate(oggetto.Model, vec3(-2.0, 4.0, 7.0));
-	oggetto.Model = scale(oggetto.Model, vec3(2.0f, 2.0f, 2.0f));
-	oggetto.Model = rotate(oggetto.Model, radians(90.0f), vec3(1.0, 0.0, 0.0));
-	oggetto.sceltaVS = ShaderOption::INTERPOLATING_SHADING;
-	oggetto.material = MaterialType::EMERALD;
+	oggetto.sceltaVS = ShaderOption::PHONG_SHADING;
+	oggetto.illuminazione = ShadingType::BLINN;
+	oggetto.nome = "Tavolo";
+	oggetto.material = MaterialType::RED_PLASTIC;
 	Scena.push_back(oggetto);
-	oggetto.vertici.clear();
 
+	oggetto.vertici.clear();
 	oggetto.colori.clear();
 	oggetto.indici.clear();
 	oggetto.normali.clear();
 	oggetto.texCoords.clear();
 
-	
-	bool obj;
-	name = "Shine_Sprite.obj";
-	path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);
+	// Creazione delle gambe del tavolo
+	Mesh gamba1, gamba2, gamba3, gamba4;
 
- 	printf("Model3D %d \n", Model3D.size());
+	// Scala e traslazione per la gamba 1
+	mat4 scala_gamba1 = scale(mat4(1.0), vec3(0.1, 2.0, 0.1));
+	mat4 traslazione_gamba1 = translate(mat4(1.0), vec3(-1.8, -4.1, 5.2));
+	gamba1.Model = traslazione_gamba1 * scala_gamba1;
 
-	int nmeshes = Model3D.size();
+	// Scala e traslazione per la gamba 2
+	mat4 scala_gamba2 = scale(mat4(1.0), vec3(0.1, 2.0, 0.1));
+	mat4 traslazione_gamba2 = translate(mat4(1.0), vec3(-1.8, -4.1, 6.8));
+	gamba2.Model = traslazione_gamba2 * scala_gamba2;
 
-	for (int i = 0; i < nmeshes; i++)
-	{
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, 6.0, 12.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5,0.5));
-		Model3D[i].nome = "Moneta";
-		Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
+	// Scala e traslazione per la gamba 3
+	mat4 scala_gamba3 = scale(mat4(1.0), vec3(0.1, 2.0, 0.1));
+	mat4 traslazione_gamba3 = translate(mat4(1.0), vec3(1.8, -4.1, 5.2));
+	gamba3.Model = traslazione_gamba3 * scala_gamba3;
 
-	 
-		vec3 ambiental = Model3D[i].materiale.ambient;
-		vec3 diffusivo = Model3D[i].materiale.diffuse;
-		vec3 speculare = Model3D[i].materiale.specular;
-		Model3D[i].materiale.ambient = ambiental;
-		Model3D[i].materiale.diffuse = diffusivo;
-		Model3D[i].materiale.specular = speculare;
-		Model3D[i].materiale.shininess = red_plastic_shininess;
+	// Scala e traslazione per la gamba 4
+	mat4 scala_gamba4 = scale(mat4(1.0), vec3(0.1, 2.0, 0.1));
+	mat4 traslazione_gamba4 = translate(mat4(1.0), vec3(1.8, -4.1, 6.8));
+	gamba4.Model = traslazione_gamba4 * scala_gamba4;
 
-	}
+	// Creazione delle gambe come cubi e aggiunta alla scena
+	crea_Cubo(&gamba1, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_Cubo(&gamba2, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_Cubo(&gamba3, vec4(1.0, 0.0, 0.0, 1.0));
+	crea_Cubo(&gamba4, vec4(1.0, 0.0, 0.0, 1.0));
 
-	ScenaObj.push_back(Model3D);
+	// Creazione del Vertex Array Object (VAO) per ogni gamba
+	crea_VAO_Vector(&gamba1);
+	crea_VAO_Vector(&gamba2);
+	crea_VAO_Vector(&gamba3);
+	crea_VAO_Vector(&gamba4);
 
-	Model3D.clear();
+	gamba1.sceltaVS = ShaderOption::PHONG_SHADING;
+	gamba1.illuminazione = ShadingType::BLINN;
+	gamba1.nome = "Gamba";
+	gamba1.material = MaterialType::RED_PLASTIC;
 
-	name = "house.obj";
-	path = Meshdir + name;
-	obj = loadAssImp(path.c_str(), Model3D);
+	gamba2.sceltaVS = ShaderOption::PHONG_SHADING;
+	gamba2.illuminazione = ShadingType::BLINN;
+	gamba2.nome = "Gamba";
+	gamba2.material = MaterialType::RED_PLASTIC;
 
-	printf("Model3D %d \n", Model3D.size());
+	gamba3.sceltaVS = ShaderOption::PHONG_SHADING;
+	gamba3.illuminazione = ShadingType::BLINN;
+	gamba3.nome = "Gamba";
+	gamba3.material = MaterialType::RED_PLASTIC;
 
-	nmeshes = Model3D.size();
+	gamba4.sceltaVS = ShaderOption::PHONG_SHADING;
+	gamba4.illuminazione = ShadingType::BLINN;
+	gamba4.nome = "Gamba";
+	gamba4.material = MaterialType::RED_PLASTIC;
 
-	for (int i = 0; i < nmeshes; i++)
-	{
-		crea_VAO_Vector_MeshObj(&Model3D[i]);
-		Model3D[i].ModelM = mat4(1.0);
-		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, -1.0, 16.0));
-		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5, 0.5));
-		Model3D[i].nome = "POkemon";
-		Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
+	// Aggiunta delle gambe alla scena
+	Scena.push_back(gamba1);
+	Scena.push_back(gamba2);
+	Scena.push_back(gamba3);
+	Scena.push_back(gamba4);
 
 
-		vec3 ambiental = Model3D[i].materiale.ambient;
-		vec3 diffusivo = Model3D[i].materiale.diffuse;
-		vec3 speculare = Model3D[i].materiale.specular;
-		Model3D[i].materiale.ambient = ambiental;
-		Model3D[i].materiale.diffuse = diffusivo;
-		Model3D[i].materiale.specular = speculare;
-		Model3D[i].materiale.shininess = red_plastic_shininess;
+	//
+	//bool obj;
+	//name = "Shine_Sprite.obj";
+	//path = Meshdir + name;
+	//obj = loadAssImp(path.c_str(), Model3D);
 
-	}
+ //	printf("Model3D %d \n", Model3D.size());
 
-	ScenaObj.push_back(Model3D);
+	//int nmeshes = Model3D.size();
+
+	//for (int i = 0; i < nmeshes; i++)
+	//{
+	//	crea_VAO_Vector_MeshObj(&Model3D[i]);
+	//	Model3D[i].ModelM = mat4(1.0);
+	//	Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, 6.0, 12.0));
+	//	Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5,0.5));
+	//	Model3D[i].nome = "Moneta";
+	//	Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
+
+	// 
+	//	vec3 ambiental = Model3D[i].materiale.ambient;
+	//	vec3 diffusivo = Model3D[i].materiale.diffuse;
+	//	vec3 speculare = Model3D[i].materiale.specular;
+	//	Model3D[i].materiale.ambient = ambiental;
+	//	Model3D[i].materiale.diffuse = diffusivo;
+	//	Model3D[i].materiale.specular = speculare;
+	//	Model3D[i].materiale.shininess = red_plastic_shininess;
+
+	//}
+
+	//ScenaObj.push_back(Model3D);
+
+	//Model3D.clear();
+
+	//name = "house.obj";
+	//path = Meshdir + name;
+	//obj = loadAssImp(path.c_str(), Model3D);
+
+	//printf("Model3D %d \n", Model3D.size());
+
+	//nmeshes = Model3D.size();
+
+	//for (int i = 0; i < nmeshes; i++)
+	//{
+	//	crea_VAO_Vector_MeshObj(&Model3D[i]);
+	//	Model3D[i].ModelM = mat4(1.0);
+	//	Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, -1.0, 16.0));
+	//	Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5, 0.5));
+	//	Model3D[i].nome = "POkemon";
+	//	Model3D[i].sceltaVS = ShaderOption::NO_TEXTURE;
+
+
+	//	vec3 ambiental = Model3D[i].materiale.ambient;
+	//	vec3 diffusivo = Model3D[i].materiale.diffuse;
+	//	vec3 speculare = Model3D[i].materiale.specular;
+	//	Model3D[i].materiale.ambient = ambiental;
+	//	Model3D[i].materiale.diffuse = diffusivo;
+	//	Model3D[i].materiale.specular = speculare;
+	//	Model3D[i].materiale.shininess = red_plastic_shininess;
+
+	//}
+
+	//ScenaObj.push_back(Model3D);
 	
 	 
 
@@ -393,8 +406,8 @@ void INIT_CAMERA_PROJECTION(void)
 
 void INIT_Illuminazione()
 {
-	light.position = { 0.0,3.0,0.0 };
-	light.color = { 1.0,1.0,1.0 };
+	light.position = glm::vec4(0.0, 5.5, 20.0, -2.0);
+	light.color = { 1.0, 1.0, 1.0 };
 	light.power = 1.f;
 
 	//Setup dei materiali

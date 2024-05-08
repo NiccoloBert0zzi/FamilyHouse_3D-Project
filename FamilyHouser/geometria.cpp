@@ -387,7 +387,76 @@ void crea_cilindro(Mesh* mesh, vec4 colore)
 		mesh->indici.push_back(i);
 		mesh->indici.push_back(i + 1);
 	}
-
-
-
 }
+void crea_Cubo(Mesh* mesh, vec4 color)
+{
+	// Vertici del cubo
+	mesh->vertici.push_back(vec3(-0.5, -0.5, 0.5));  // V0
+	mesh->vertici.push_back(vec3(0.5, -0.5, 0.5));   // V1
+	mesh->vertici.push_back(vec3(0.5, 0.5, 0.5));    // V2
+	mesh->vertici.push_back(vec3(-0.5, 0.5, 0.5));   // V3
+	mesh->vertici.push_back(vec3(-0.5, -0.5, -0.5)); // V4
+	mesh->vertici.push_back(vec3(0.5, -0.5, -0.5));  // V5
+	mesh->vertici.push_back(vec3(0.5, 0.5, -0.5));   // V6
+	mesh->vertici.push_back(vec3(-0.5, 0.5, -0.5));  // V7
+
+	// Normali per ciascun vertice (cuboidi hanno le stesse normali per ciascuna faccia)
+	vec3 normal_front(0.0, 0.0, 1.0);
+	vec3 normal_back(0.0, 0.0, -1.0);
+	vec3 normal_top(0.0, 1.0, 0.0);
+	vec3 normal_bottom(0.0, -1.0, 0.0);
+	vec3 normal_right(1.0, 0.0, 0.0);
+	vec3 normal_left(-1.0, 0.0, 0.0);
+
+	// Colori per ciascun vertice
+	for (int i = 0; i < 8; ++i) {
+		mesh->colori.push_back(color);
+	}
+
+	// Aggiunta delle normali
+	mesh->normali.push_back(normal_front);
+	mesh->normali.push_back(normal_front);
+	mesh->normali.push_back(normal_front);
+	mesh->normali.push_back(normal_front);
+	mesh->normali.push_back(normal_back);
+	mesh->normali.push_back(normal_back);
+	mesh->normali.push_back(normal_back);
+	mesh->normali.push_back(normal_back);
+	mesh->normali.push_back(normal_top);
+	mesh->normali.push_back(normal_top);
+	mesh->normali.push_back(normal_top);
+	mesh->normali.push_back(normal_top);
+	mesh->normali.push_back(normal_bottom);
+	mesh->normali.push_back(normal_bottom);
+	mesh->normali.push_back(normal_bottom);
+	mesh->normali.push_back(normal_bottom);
+	mesh->normali.push_back(normal_right);
+	mesh->normali.push_back(normal_right);
+	mesh->normali.push_back(normal_right);
+	mesh->normali.push_back(normal_right);
+	mesh->normali.push_back(normal_left);
+	mesh->normali.push_back(normal_left);
+	mesh->normali.push_back(normal_left);
+	mesh->normali.push_back(normal_left);
+
+	// Coordinate texture per ciascun vertice (opzionali)
+	mesh->texCoords.push_back(vec2(0.0, 1.0));
+	mesh->texCoords.push_back(vec2(1.0, 1.0));
+	mesh->texCoords.push_back(vec2(1.0, 0.0));
+	mesh->texCoords.push_back(vec2(0.0, 0.0));
+
+	// Aggiunta degli indici per definire le facce del cubo
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(2);
+	mesh->indici.push_back(0); mesh->indici.push_back(2); mesh->indici.push_back(3);
+	mesh->indici.push_back(4); mesh->indici.push_back(5); mesh->indici.push_back(6);
+	mesh->indici.push_back(4); mesh->indici.push_back(6); mesh->indici.push_back(7);
+	mesh->indici.push_back(1); mesh->indici.push_back(5); mesh->indici.push_back(6);
+	mesh->indici.push_back(1); mesh->indici.push_back(6); mesh->indici.push_back(2);
+	mesh->indici.push_back(0); mesh->indici.push_back(4); mesh->indici.push_back(7);
+	mesh->indici.push_back(0); mesh->indici.push_back(7); mesh->indici.push_back(3);
+	mesh->indici.push_back(3); mesh->indici.push_back(2); mesh->indici.push_back(6);
+	mesh->indici.push_back(3); mesh->indici.push_back(6); mesh->indici.push_back(7);
+	mesh->indici.push_back(0); mesh->indici.push_back(1); mesh->indici.push_back(5);
+	mesh->indici.push_back(0); mesh->indici.push_back(5); mesh->indici.push_back(4);
+}
+

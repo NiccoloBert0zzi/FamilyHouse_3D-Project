@@ -7,6 +7,6 @@ void crea_piramide(Mesh* piramide);
 void crea_sfera(Mesh* mesh, vec4 colore);
 void crea_cilindro(Mesh* mesh, vec4 colore);
 void crea_toro(Mesh* mesh, vec4 colore);
-void crea_cono(Mesh* mesh, vec4 colore);
- 
+void crea_cono(Mesh* mesh, vec4 colore); 
+void crea_Cubo(Mesh* mesh, vec4 color);
 
