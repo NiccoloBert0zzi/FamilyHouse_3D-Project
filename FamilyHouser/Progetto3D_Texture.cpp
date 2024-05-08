@@ -174,9 +174,9 @@ void buildOpenGLMenu()
 	glutAddMenuEntry(shaders[ShaderOption::WAVE].name.c_str(), ShaderOption::WAVE); //vs 4
 
 	int illuminationSubMenu = glutCreateMenu(illumination_menu_function);
-	glutAddMenuEntry(illuminazioni[ShadingType::NO_NONE].name.c_str(), ShadingType::NO_NONE); //no illuminazione vs 0
-	glutAddMenuEntry(illuminazioni[ShadingType::PHONG].name.c_str(), ShadingType::PHONG); //illu. phong vs 0
-	glutAddMenuEntry(illuminazioni[ShadingType::BLINN].name.c_str(), ShadingType::BLINN); //ill blinn
+	glutAddMenuEntry(shaders[ShadingType::NO_NONE].name.c_str(), ShadingType::NO_NONE); //no illuminazione vs 0
+	glutAddMenuEntry(shaders[ShadingType::PHONG].name.c_str(), ShadingType::PHONG); //illu. phong vs 0
+	glutAddMenuEntry(shaders[ShadingType::BLINN].name.c_str(), ShadingType::BLINN); //ill blinn
 
 
 	glutCreateMenu(main_menu_func); // richiama main_menu_func() alla selezione di una voce menu
